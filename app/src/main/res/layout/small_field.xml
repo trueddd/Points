@@ -12,9 +12,11 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:columnCount="10"
+                android:id="@+id/grid"
                 android:orientation="horizontal">
+            <!--
             <ImageView
-                    
+
                     android:src="@drawable/empty_cell_10px"/>
             <ImageView android:src="@drawable/empty_cell_10px"/>
             <ImageView android:src="@drawable/empty_cell_10px"/>
@@ -115,6 +117,7 @@
             <ImageView android:src="@drawable/empty_cell_10px"/>
             <ImageView android:src="@drawable/empty_cell_10px"/>
             <ImageView android:src="@drawable/empty_cell_10px"/>
+            -->
         </GridLayout>
     </HorizontalScrollView>
 </ScrollView>
