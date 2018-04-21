@@ -3,4 +3,8 @@
     <string name="new_game_header">New Game</string>
     <string name="stats_header">Statistics</string>
     <string name="exit_header">Exit</string>
+
+    <string name="exit_dialog_message">Are you sure to exit?</string>
+    <string name="dialog_positive">Yes</string>
+    <string name="dialog_negative">No</string>
 </resources>
