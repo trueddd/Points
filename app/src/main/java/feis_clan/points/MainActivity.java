@@ -22,8 +22,8 @@ public class MainActivity extends Activity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this, GameActivity.class);
-                startActivity(intent);
+                DialogFragment dialog = new PreGameDialog();
+                dialog.show(getFragmentManager(),"pregameDialog");
             }
         });
 
