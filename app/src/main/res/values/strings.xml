@@ -5,13 +5,11 @@
     <string name="exit_header">Exit</string>
 
     <string name="pregame_dialog_title">Pregame Settings</string>
-    <string name="pregame_dialog_message">Please, set up some settings before game starts (Note: try to avoid setting up large values such as 1000x1000 as height and width).</string>
-    <string name="pregame_dialog_height">Height</string>
-    <string name="height_hint">Type height of the field you want here…</string>
-    <string name="pregame_dialog_width">Width</string>
-    <string name="width_hint">Type width of the field you want here…</string>
-    <string name="pregame_dialog_field_height">Set game field height</string>
-    <string name="pregame_dialog_field_width">Set game field width</string>
+    <string name="pregame_dialog_message">Please, set up some settings before game starts.</string>
+    <string name="pregame_dialog_field_side">Size of battlefield side</string>
+    <string name="pregame_dialog_current_size">Current size</string>
+    <string name="low_bound_side_size">5</string>
+    <string name="high_bound_side_size">20</string>
     <string name="pregame_dialog_start">Start!</string>
 
     <string name="exit_dialog_message">Are you sure to exit?</string>
