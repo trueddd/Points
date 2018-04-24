@@ -16,11 +16,12 @@ public class GameActivity extends Activity {
     GridLayout grid;
     private boolean turn = false;
     private byte cells_status[][];
+    private Stack<int[]> path = new Stack<>();
     //private int redScore = 0;
     //private int blueScore = 0;
     private int sideSize, square;
-    //private boolean finishedPath = false;
     private byte visited[][];
+    private int sI, sJ;
 
     //private Time timeSpent;
     @Override
@@ -89,149 +90,120 @@ public class GameActivity extends Activity {
     }
 
     private void checkClosedField(int startI, int startJ){
-        /*boolean visited[][] = new boolean[sideSize][sideSize];
-        for(int i=0;i<visited.length;i++)
-            for(int j=0;j<visited[i].length;j++)
-                visited[i][j] = false;*/
-        /*for(int i=0;i<sideSize;i++){
-            for(int j=0;j<sideSize;j++){
-                if(cells_status[i][j] == colourToCheck){
-
-                }
-            }
-        }*/
         visited = getEmptyArray();
-        visited[startI][startJ] = 2;
-        if(isPath(startI,startJ,cells_status[startI][startJ]))
-            Toast.makeText(getApplicationContext(),"YEAH!!!",Toast.LENGTH_SHORT).show();
-        //finishedPath = false;
-        //if(getPath(startI,startJ,cells_status[startI][startJ],visited/*,new Stack<int[]>()*/))
-        //    Toast.makeText(getApplicationContext(), "Gotcha!",
-        //            Toast.LENGTH_SHORT).show();
-        /*while(!path.empty()){
-            int point[] = path.pop();
-            Toast.makeText(getApplicationContext(),
-                    Integer.toString(point[0])+":"+Integer.toString(point[1]),
-                    Toast.LENGTH_SHORT).show();
-        }*/
+        path.clear();
+        sI = startI;
+        sJ = startJ;
+        if(isPath(startI,startJ,cells_status[startI][startJ])){
+            StringBuilder resLoop = new StringBuilder();
+            while (!path.empty()){
+                int last[] = path.pop();
+                resLoop.append(Integer.toString(last[0]));
+                resLoop.append(":");
+                resLoop.append(Integer.toString(last[1]));
+                resLoop.append(" ");
+            }
+            Log.i("Result loop",resLoop.toString());
+        }
     }
 
-    private boolean isPath(int curI, int curJ, byte color){
+    /**
+     * Use Stack to watch points I passed.
+     *
+     *  | |*| |
+     *  |*|#|*|
+     *  | |*| |
+     */
 
-        if(visited[curI][curJ] == 2 && isFieldPassed(visited))
-            return true;
-        visited[curI][curJ]=1;
+    private boolean isPath(int curI, int curJ, byte color){
+        if(curI == sI && curJ == sJ){
+            if(path.size() != 0){
+                path.push(new int[]{curI,curJ});
+                return true;
+            }
+        }
+        visited[curI][curJ] = 1;
         if(isMovable(curI,curJ,0) == color){
-            if(visited[curI-1][curJ-1] != 1){
-                if(isPath(curI-1,curJ-1,color))
+            if(visited[curI-1][curJ-1] == 0 ||
+                    (visited[curI-1][curJ-1] == 1 && !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ-1))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI-1,curJ-1,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
         if(isMovable(curI,curJ,2) == color){
-            if(visited[curI-1][curJ+1] != 1){
-                if(isPath(curI-1,curJ+1,color))
+            if(visited[curI-1][curJ+1] == 0 ||
+                    (visited[curI-1][curJ+1] == 1 && !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ+1))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI-1,curJ+1,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
         if(isMovable(curI,curJ,5) == color){
-            if(visited[curI+1][curJ-1] != 1){
-                if(isPath(curI+1,curJ-1,color))
+            if(visited[curI+1][curJ-1] == 0 ||
+                    (visited[curI+1][curJ-1] == 1 && !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ-1))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI+1,curJ-1,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
         if(isMovable(curI,curJ,7) == color){
-            if(visited[curI+1][curJ+1] != 1){
-                return isPath(curI + 1, curJ + 1, color);
-            }
-        }
-        return false;
-    }
-
-    private boolean getPath(int curI, int curJ,
-                                 byte colour, byte visited[][]/*, Stack<int[]> path*/){
-        if(visited[curI][curJ] == 2 && isFieldPassed(visited)) {
-            //finishedPath = true;
-            return true;
-        }
-        visited[curI][curJ] = 1;
-        //path.push(new int[]{curI, curJ});
-        /*if(path.size()>1 && path.firstElement() == path.lastElement()) {
-            //Toast.makeText(getApplicationContext(), "Gotcha!", Toast.LENGTH_SHORT).show();
-            return path;
-        }*/
-        if(isMovable(curI,curJ,0) == colour){
-            if(visited[curI-1][curJ-1] != 1){
-                /*path = getPath(curI-1,curJ-1,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI-1,curJ-1,colour,visited))
+            if(visited[curI+1][curJ+1] == 0 ||
+                    (visited[curI+1][curJ+1] == 1 && !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ+1))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI+1,curJ+1,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
-        if(isMovable(curI,curJ,1) == colour){
-            if(visited[curI-1][curJ] != 1){
-                /*path = getPath(curI-1,curJ,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI-1,curJ,colour,visited))
+        if(isMovable(curI,curJ,1) == color){
+            if(visited[curI-1][curJ] == 0 ||
+                    (visited[curI-1][curJ] == 1 && !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI-1,curJ,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
-        if(isMovable(curI,curJ,2) == colour){
-            if(visited[curI-1][curJ+1] != 1){
-                /*path = getPath(curI-1,curJ+1,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI-1,curJ+1,colour,visited))
+        if(isMovable(curI,curJ,3) == color){
+            if(visited[curI][curJ-1] == 0 ||
+                    (visited[curI][curJ-1] == 1 && !(path.lastElement()[0] == curI && path.lastElement()[1] == curJ-1))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI,curJ-1,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
-        if(isMovable(curI,curJ,3) == colour){
-            if(visited[curI][curJ-1] != 1){
-                /*path = getPath(curI,curJ-1,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI,curJ-1,colour,visited))
+        if(isMovable(curI,curJ,4) == color){
+            if(visited[curI][curJ+1] == 0 ||
+                    (visited[curI][curJ+1] == 1 && !(path.lastElement()[0] == curI && path.lastElement()[1] == curJ+1))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI,curJ+1,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
-        if(isMovable(curI,curJ,4) == colour){
-            if(visited[curI][curJ+1] != 1){
-                /*path = getPath(curI,curJ+1,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI,curJ+1,colour,visited))
+        if(isMovable(curI,curJ,6) == color){
+            if(visited[curI+1][curJ] == 0 ||
+                    (visited[curI+1][curJ] == 1 && !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ))){
+                path.push(new int[]{curI,curJ});
+                if(isPath(curI+1,curJ,color)){
                     return true;
+                }else
+                    path.pop();
             }
         }
-        if(isMovable(curI,curJ,5) == colour){
-            if(visited[curI+1][curJ-1] != 1){
-                /*path = getPath(curI+1,curJ-1,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI+1,curJ-1,colour,visited))
-                    return true;
-            }
-        }
-        if(isMovable(curI,curJ,6) == colour){
-            if(visited[curI+1][curJ] != 1){
-                /*path = getPath(curI+1,curJ,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI+1,curJ,colour,visited))
-                    return true;
-            }
-        }
-        if(isMovable(curI,curJ,7) == colour){
-            if(visited[curI+1][curJ+1] != 1){
-                /*path = getPath(curI+1,curJ+1,colour,visited,path);
-                if(finishedPath)
-                    return path;*/
-                if(getPath(curI+1,curJ+1,colour,visited))
-                    return true;
-            }
-        }
-        //path.pop();
+        visited[curI][curJ] = 2;
         return false;
     }
 
@@ -290,16 +262,5 @@ public class GameActivity extends Activity {
                 return cells_status[i+1][j+1];
             else return 0;
         }
-    }
-
-    private boolean isFieldPassed(byte visited[][]){
-        for(int i=0;i<sideSize;i++){
-            for(int j=0;j<sideSize;j++){
-                if(visited[i][j] == 1){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
