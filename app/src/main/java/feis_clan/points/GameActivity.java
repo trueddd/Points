@@ -115,6 +115,14 @@ public class GameActivity extends Activity {
      * TODO
      * Out of bounds in string:138
      */
+
+    /**
+     * | | | | | |
+     * | | |*| | |
+     * | |*|&|*| |
+     * | | |*| | |
+     * | | | | | |
+     */
     private void capture(byte colorToCapture){
         //2:1 3:2 2:3 1:2 2:1
         path.pop();

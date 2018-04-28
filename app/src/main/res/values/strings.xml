@@ -8,8 +8,8 @@
     <string name="pregame_dialog_message">Please, set up some settings before game starts.</string>
     <string name="pregame_dialog_field_side">Size of battlefield side</string>
     <string name="pregame_dialog_current_size">Current size</string>
-    <string name="low_bound_side_size">5</string>
-    <string name="high_bound_side_size">20</string>
+    <string name="low_bound_side_size" translatable="false">5</string>
+    <string name="high_bound_side_size" translatable="false">20</string>
     <string name="pregame_dialog_start">Start!</string>
 
     <string name="exit_dialog_message">Are you sure to exit?</string>

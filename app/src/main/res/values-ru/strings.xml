@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Points</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_negative">Нет</string>
+    <string name="dialog_positive">Да</string>
+    <string name="exit_dialog_message">Вы уверены, что хотите выйти?</string>
+    <string name="exit_header">Выход</string>
+    <string name="new_game_header">Новая игра</string>
+    <string name="pregame_dialog_current_size">Текущий размер</string>
+    <string name="pregame_dialog_field_side">Размер поля для игры</string>
+    <string name="pregame_dialog_message">Несколько настроек перед игрой</string>
+    <string name="pregame_dialog_start">Старт!</string>
+    <string name="pregame_dialog_title">Доигровая настройка</string>
+    <string name="stats_header">Статистика</string>
+</resources>
