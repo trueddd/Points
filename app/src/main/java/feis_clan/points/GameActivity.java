@@ -98,7 +98,7 @@ public class GameActivity extends Activity {
         sJ = startJ;
         byte color = cells_status[startI][startJ];
         if(isPath(startI,startJ,color)){
-            /*StringBuilder resLoop = new StringBuilder();
+            StringBuilder resLoop = new StringBuilder();
             while (!path.empty()){
                 int last[] = path.pop();
                 resLoop.append(Integer.toString(last[0]));
@@ -106,13 +106,14 @@ public class GameActivity extends Activity {
                 resLoop.append(Integer.toString(last[1]));
                 resLoop.append(" ");
             }
-            Log.i("Result loop",resLoop.toString());*/
-            capture((byte)(color == 1 ? 2 : 1));
+            Log.i("Result loop",resLoop.toString());
+            //capture((byte)(color == 1 ? 2 : 1));
         }
     }
 
     /**
-     * Need to rework. Out of bounds in string:138
+     * TODO
+     * Out of bounds in string:138
      */
     private void capture(byte colorToCapture){
         //2:1 3:2 2:3 1:2 2:1
@@ -202,17 +203,6 @@ public class GameActivity extends Activity {
         }
     }
 
-    /**
-     *  | |*| |
-     *  |*|#|*| <= crash
-     *  | |*|*|
-     *
-     *  |*| | | | |
-     *  | |*|*|*| |
-     *  | | |*| | |
-     *  | | | | | |
-     */
-
     private boolean isPath(int curI, int curJ, byte color){
         if(curI == sI && curJ == sJ){
             if(path.size() != 0){
@@ -220,10 +210,12 @@ public class GameActivity extends Activity {
                 return true;
             }
         }
+        //compare possible point and first element in stack
         visited[curI][curJ] = 1;
         if(isMovable(curI,curJ,0) == color){
             if(visited[curI-1][curJ-1] == 0 ||
-                    (visited[curI-1][curJ-1] == 1 && !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ-1))){
+                    (visited[curI-1][curJ-1] == 1 && path.firstElement()[0] == curI-1 && path.firstElement()[1] == curJ-1  &&
+                        !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ-1))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI-1,curJ-1,color)){
                     return true;
@@ -233,7 +225,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,1) == color){
             if(visited[curI-1][curJ] == 0 ||
-                    (visited[curI-1][curJ] == 1 && !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ))){
+                    (visited[curI-1][curJ] == 1 && path.firstElement()[0] == curI-1 && path.firstElement()[1] == curJ  &&
+                            !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI-1,curJ,color)){
                     return true;
@@ -243,7 +236,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,2) == color){
             if(visited[curI-1][curJ+1] == 0 ||
-                    (visited[curI-1][curJ+1] == 1 && !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ+1))){
+                    (visited[curI-1][curJ+1] == 1 && path.firstElement()[0] == curI-1 && path.firstElement()[1] == curJ+1  &&
+                            !(path.lastElement()[0] == curI-1 && path.lastElement()[1] == curJ+1))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI-1,curJ+1,color)){
                     return true;
@@ -253,7 +247,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,3) == color){
             if(visited[curI][curJ-1] == 0 ||
-                    (visited[curI][curJ-1] == 1 && !(path.lastElement()[0] == curI && path.lastElement()[1] == curJ-1))){
+                    (visited[curI][curJ-1] == 1 && path.firstElement()[0] == curI && path.firstElement()[1] == curJ-1  &&
+                            !(path.lastElement()[0] == curI && path.lastElement()[1] == curJ-1))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI,curJ-1,color)){
                     return true;
@@ -263,7 +258,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,4) == color){
             if(visited[curI][curJ+1] == 0 ||
-                    (visited[curI][curJ+1] == 1 && !(path.lastElement()[0] == curI && path.lastElement()[1] == curJ+1))){
+                    (visited[curI][curJ+1] == 1 && path.firstElement()[0] == curI && path.firstElement()[1] == curJ+1  &&
+                            !(path.lastElement()[0] == curI && path.lastElement()[1] == curJ+1))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI,curJ+1,color)){
                     return true;
@@ -273,7 +269,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,5) == color){
             if(visited[curI+1][curJ-1] == 0 ||
-                    (visited[curI+1][curJ-1] == 1 && !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ-1))){
+                    (visited[curI+1][curJ-1] == 1 && path.firstElement()[0] == curI+1 && path.firstElement()[1] == curJ-1  &&
+                            !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ-1))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI+1,curJ-1,color)){
                     return true;
@@ -283,7 +280,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,6) == color){
             if(visited[curI+1][curJ] == 0 ||
-                    (visited[curI+1][curJ] == 1 && !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ))){
+                    (visited[curI+1][curJ] == 1 && path.firstElement()[0] == curI+1 && path.firstElement()[1] == curJ  &&
+                            !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI+1,curJ,color)){
                     return true;
@@ -293,7 +291,8 @@ public class GameActivity extends Activity {
         }
         if(isMovable(curI,curJ,7) == color){
             if(visited[curI+1][curJ+1] == 0 ||
-                    (visited[curI+1][curJ+1] == 1 && !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ+1))){
+                    (visited[curI+1][curJ+1] == 1 && path.firstElement()[0] == curI+1 && path.firstElement()[1] == curJ+1  &&
+                            !(path.lastElement()[0] == curI+1 && path.lastElement()[1] == curJ+1))){
                 path.push(new int[]{curI,curJ});
                 if(isPath(curI+1,curJ+1,color)){
                     return true;
