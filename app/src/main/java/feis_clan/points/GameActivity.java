@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -17,13 +18,12 @@ public class GameActivity extends Activity {
     private boolean turn = false;
     private byte cells_status[][];
     private Stack<int[]> path = new Stack<>();
-    //private int redScore = 0;
-    //private int blueScore = 0;
+    private int redScore = 0;
+    private int blueScore = 0;
     private int sideSize, square;
     private byte visited[][];
     private int sI, sJ;
 
-    //private Time timeSpent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,6 @@ public class GameActivity extends Activity {
     private View.OnClickListener cellClick=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //makeShortToast(getApplicationContext(),Integer.toString(v.getId()));
             setPoint(v);
         }
     };
@@ -71,9 +70,10 @@ public class GameActivity extends Activity {
             cells_status[cell_id[0]][cell_id[1]] = (byte)(turn ? 1 : 2);
             ImageView image=(ImageView)findViewById(view.getId());
             image.setImageResource(turn ? R.drawable.red_cell_10px : R.drawable.blue_cell_10px);
-            maskDangerPlaces();
+            //maskDangerousPlaces();
             checkClosedField(cell_id[0],cell_id[1]);
-            unmask();
+            //unmask();
+            recountScore();
             toggleTurn();
         }
         else {
@@ -98,7 +98,7 @@ public class GameActivity extends Activity {
         sJ = startJ;
         byte color = cells_status[startI][startJ];
         if(isPath(startI,startJ,color)){
-            StringBuilder resLoop = new StringBuilder();
+            /*StringBuilder resLoop = new StringBuilder();
             while (!path.empty()){
                 int last[] = path.pop();
                 resLoop.append(Integer.toString(last[0]));
@@ -106,56 +106,117 @@ public class GameActivity extends Activity {
                 resLoop.append(Integer.toString(last[1]));
                 resLoop.append(" ");
             }
-            Log.i("Result loop",resLoop.toString());
-            //capture((byte)(color == 1 ? 2 : 1));
+            Log.i("Result loop",resLoop.toString());*/
+            if(turn){
+                redScore += capture((byte)2);
+            }else
+                blueScore += capture((byte)1);
         }
     }
+
+    private void recountScore(){
+        redScore = blueScore = 0;
+        for(int i=0;i<sideSize;i++){
+            for(int j=0;j<sideSize;j++){
+                if(cells_status[i][j] == 1)
+                    redScore++;
+                if(cells_status[i][j] == 2)
+                    blueScore++;
+            }
+        }
+        ((TextView)findViewById(R.id.redScoreText)).setText(Integer.toString(redScore));
+        ((TextView)findViewById(R.id.blueScoreText)).setText(Integer.toString(blueScore));
+    }
+
+    /**
+     * | | | |*| |
+     * | | |*| |*|
+     * | |*|&| |*|
+     * | | |*|*| |
+     * | | | | | |
+     */
 
     /**
      * TODO
-     * Out of bounds in string:138
+     * чекать каждую точку на предмет ударения с соседними точками (в 4 направления) другого цвета
      */
-
-    /**
-     * | | | | | |
-     * | | |*| | |
-     * | |*|&|*| |
-     * | | |*| | |
-     * | | | | | |
-     */
-    private void capture(byte colorToCapture){
+    private int capture(byte colorToCapture){
         //2:1 3:2 2:3 1:2 2:1
+        int count = 0;
         path.pop();
-        //3:2 2:3 1:2 2:1 <=
-        ArrayList<int[]> list = new ArrayList<>();
-        while(!path.empty()){
-            int a[] = path.pop();
-            Log.i("w", Integer.toString(a[0])+":"+Integer.toString(a[1])+" ");
-            list.add(a);
-        }
-        //3:2 2:3 1:2 2:1 in list
+        ArrayList<int[]> list = new ArrayList<>(path);
+        Log.i("qwe", Integer.toString(list.size()));
+        //[3,2] [2,3] [1,2] [2,1]
+
         for(int i=0;i<sideSize;i++){
-            ArrayList<int[]> l = new ArrayList<>();
-            for (int[] a : list) {
-                if (a[0] == i) {
-                    l.add(a);
+            for(int j=0;j<sideSize;j++){
+                if(cells_status[i][j] == colorToCapture){
+                    if(isSurrounded(list, i, j)){
+                        Log.i("capturing point", Integer.toString(i)+":"+Integer.toString(j));
+                        cells_status[i][j] = (byte)(colorToCapture == 1 ? 2 : 1);
+                        ImageView point = (ImageView)findViewById(i*sideSize+j+1);
+                        point.setImageResource((turn ? R.drawable.red_cell_10px : R.drawable.blue_cell_10px));
+                        count++;
+                    }else {
+                        Log.i("q", "Point "+Integer.toString(i)+":"+Integer.toString(j)+" is not surrounded");
+                    }
                 }
             }
-            Log.i("q",l.toString());
-            if(l.size() == 1)
-                continue;
-            if(l.get(0)[1] > l.get(1)[1]){
-                l.add(l.get(0));
-                l.remove(0);
-            }
-            for(int j=l.get(0)[1];j<l.get(1)[1];j++){
-                if(cells_status[i][j] == colorToCapture)
-                    cells_status[i][j] = (byte)(colorToCapture == 1 ? 2 : 1);
-            }
         }
+        return count;
     }
 
-    private void maskDangerPlaces(){
+    private boolean isSurrounded(ArrayList<int[]> wall, int curI, int curJ){
+        if(isUpLocked(wall, curI, curJ, cells_status[curI][curJ])){
+            Log.i("q", "Point "+Integer.toString(curI)+":"+Integer.toString(curJ)+" is upLocked");
+            if(isLeftLocked(wall, curI, curJ, cells_status[curI][curJ])){
+                Log.i("q", "Point "+Integer.toString(curI)+":"+Integer.toString(curJ)+" is leftLocked");
+                if(isRightLocked(wall, curI, curJ, cells_status[curI][curJ])){
+                    Log.i("q", "Point "+Integer.toString(curI)+":"+Integer.toString(curJ)+" is rightLocked");
+                    return isDownLocked(wall, curI, curJ, cells_status[curI][curJ]);
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isUpLocked(ArrayList<int[]> wall, int curI, int curJ, byte checkingPointColor) {
+        byte isMove = isMovable(curI, curJ, 1);
+        if(isMove == getOpposite(checkingPointColor) && wall.contains(new int[]{curI-1,curJ}))
+            return true;
+        if(isMove != -10){
+            return isUpLocked(wall, curI-1, curJ, checkingPointColor);
+        }else return false;
+    }
+
+    private boolean isLeftLocked(ArrayList<int[]> wall, int curI, int curJ, byte checkingPointColor){
+        byte isMove = isMovable(curI, curJ, 3);
+        if(isMove == getOpposite(checkingPointColor) && wall.contains(new int[]{curI,curJ-1}))
+            return true;
+        if(isMove != -10){
+            return isLeftLocked(wall, curI, curJ-1, checkingPointColor);
+        }else return false;
+    }
+
+    private boolean isRightLocked(ArrayList<int[]> wall, int curI, int curJ, byte checkingPointColor){
+        byte isMove = isMovable(curI, curJ, 4);
+        if(isMove == getOpposite(checkingPointColor) && wall.contains(new int[]{curI,curJ+1}))
+            return true;
+        if(isMove != -10){
+            return isRightLocked(wall, curI, curJ+1, checkingPointColor);
+        }else return false;
+    }
+
+    private boolean isDownLocked(ArrayList<int[]> wall, int curI, int curJ, byte checkingPointColor){
+        byte isMove = isMovable(curI, curJ, 6);
+        if(isMove == getOpposite(checkingPointColor) && wall.contains(new int[]{curI+1,curJ}))
+            return true;
+        if(isMove != -10){
+            return isDownLocked(wall, curI+1, curJ, checkingPointColor);
+        }else return false;
+    }
+
+    private void maskDangerousPlaces(){
         //**
         //*
         for(int i=0;i<sideSize-1;i++){
@@ -330,42 +391,46 @@ public class GameActivity extends Activity {
         if(direction == 0){
             if(i > 0 && j > 0)
                 return cells_status[i-1][j-1];
-            else return 0;
+            else return -10;
         }
         else if(direction == 1){
             if(i > 0)
                 return cells_status[i-1][j];
-            else return 0;
+            else return -10;
         }
         else if(direction == 2){
             if(i > 0 && j < sideSize-1)
                 return cells_status[i-1][j+1];
-            else return 0;
+            else return -10;
         }
         else if(direction == 3){
             if(j > 0)
                 return cells_status[i][j-1];
-            else return 0;
+            else return -10;
         }
         else if(direction == 4){
             if(j < sideSize-1)
                 return cells_status[i][j+1];
-            else return 0;
+            else return -10;
         }
         else if(direction == 5){
             if(i < sideSize-1 && j > 0)
                 return cells_status[i+1][j-1];
-            else return 0;
+            else return -10;
         }
         else if(direction == 6){
             if(i < sideSize-1)
                 return cells_status[i+1][j];
-            else return 0;
+            else return -10;
         }
         else {
             if(i < sideSize-1 && j < sideSize-1)
                 return cells_status[i+1][j+1];
-            else return 0;
+            else return -10;
         }
+    }
+
+    private byte getOpposite(byte status){
+        return (byte)(status == 1 ? 2 : 1);
     }
 }
