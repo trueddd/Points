@@ -3,12 +3,10 @@ package feis_clan.points;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.GridLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -20,7 +18,9 @@ public class GameActivity extends Activity {
     private byte cells_status[][];
     private Stack<int[]> path = new Stack<>();
     private int redScore = 0;
+    private int redPointsCaptured = 0;
     private int blueScore = 0;
+    private int bluePointsCaptured = 0;
     private int sideSize, square;
     private byte visited[][];
     private int sI, sJ;
@@ -33,7 +33,7 @@ public class GameActivity extends Activity {
         square = sideSize*sideSize;
 
         setContentView(R.layout.battlefield);
-        grid = (GridLayout) findViewById(R.id.grid);
+        grid = findViewById(R.id.grid);
 
         markupField();
         cells_status = getEmptyArray();
@@ -87,7 +87,7 @@ public class GameActivity extends Activity {
         int cell_id[] = getIDbyGridID(view.getId());
         if(cells_status[cell_id[0]][cell_id[1]] == 0){
             cells_status[cell_id[0]][cell_id[1]] = (byte)(turn ? 1 : 2);
-            ImageView image=(ImageView)findViewById(view.getId());
+            ImageView image = findViewById(view.getId());
             image.setImageResource(turn ? R.drawable.red_cell_10px : R.drawable.blue_cell_10px);
             checkClosedField(cell_id[0],cell_id[1]);
             recountScore();
@@ -126,9 +126,9 @@ public class GameActivity extends Activity {
         byte color = cells_status[startI][startJ];
         if(isPath(startI,startJ,color)){
             if(turn){
-                redScore += capture((byte)2);
+                bluePointsCaptured += capture((byte)2);
             }else
-                blueScore += capture((byte)1);
+                redPointsCaptured += capture((byte)1);
         }
     }
 
@@ -148,6 +148,15 @@ public class GameActivity extends Activity {
         }
         ((TextView)findViewById(R.id.redScoreText)).setText(String.format(Locale.getDefault(),"%d", redScore));
         ((TextView)findViewById(R.id.blueScoreText)).setText(String.format(Locale.getDefault(),"%d", blueScore));
+        if(redScore+blueScore == square){
+            showSnack();
+        }
+    }
+
+    private void showSnack(){
+        Snackbar snack = Snackbar.make(findViewById(R.id.field), "Boyz, you played so much, it\'s time to stop now!",
+                Snackbar.LENGTH_SHORT);
+        snack.show();
     }
 
     /**
@@ -167,7 +176,7 @@ public class GameActivity extends Activity {
                     if(isSurrounded(list, i, j)){
                         Log.i("capturing point", Integer.toString(i)+":"+Integer.toString(j));
                         cells_status[i][j] = (byte)(colorToCapture == 1 ? 2 : 1);
-                        ImageView point = (ImageView)findViewById(i*sideSize+j+1);
+                        ImageView point = findViewById(i*sideSize+j+1);
                         point.setImageResource((turn ? R.drawable.red_cell_10px : R.drawable.blue_cell_10px));
                         count++;
                     }else {

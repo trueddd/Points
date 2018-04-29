@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startButton=(LinearLayout)findViewById(R.id.new_game_button);
+        startButton = findViewById(R.id.new_game_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        statsButton=(LinearLayout)findViewById(R.id.stats_button);
+        statsButton = findViewById(R.id.stats_button);
         statsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        exitButton=(LinearLayout)findViewById(R.id.exit_button);
+        exitButton = findViewById(R.id.exit_button);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

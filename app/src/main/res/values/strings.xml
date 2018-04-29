@@ -13,6 +13,17 @@
     <string name="zero" translatable="false">0</string>
     <string name="pregame_dialog_start">Start!</string>
 
+    <string name="postgame_dialog_title">Game Over</string>
+    <string name="postgame_dialog_score">Score</string>
+    <string name="postgame_dialog_red">Red</string>
+    <string name="postgame_dialog_blue">Blue</string>
+    <string name="postgame_dialog_winner">Winner</string>
+    <string name="postgame_dialog_captures">Point Captures</string>
+    <string name="postgame_dialog_red_points_captured">By blue</string>
+    <string name="postgame_dialog_blue_points_captured">By red</string>
+    <string name="postgame_dialog_field_coverage">Coverage</string>
+    <string name="postgame_dialog_free">Free</string>
+
     <string name="exit_dialog_message">Are you sure to exit?</string>
     <string name="dialog_positive">Yes</string>
     <string name="dialog_negative">No</string>

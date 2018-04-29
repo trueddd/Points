@@ -3,8 +3,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:gravity="center"
+        android:id="@+id/field"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    <!--Battlefield-->
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_weight="92"
@@ -33,9 +35,11 @@
             </HorizontalScrollView>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>
+    <!--Scoreboard-->
     <LinearLayout
             android:orientation="horizontal"
             android:baselineAligned="false"
+            android:id="@+id/scoreboard"
             android:layout_width="match_parent"
             android:layout_weight="8"
             android:layout_height="0dp">
