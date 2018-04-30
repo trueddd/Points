@@ -23,9 +23,12 @@
     <string name="postgame_dialog_blue_points_captured">By red</string>
     <string name="postgame_dialog_field_coverage">Coverage</string>
     <string name="postgame_dialog_free">Free</string>
+    <string name="postgame_dialog_finish">Exit battle</string>
+    <string name="postgame_dialog_stay">Watch field</string>
 
     <string name="exit_dialog_message">Are you sure to exit?</string>
     <string name="dialog_positive">Yes</string>
     <string name="dialog_negative">No</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="percent_sign">%</string>
 </resources>

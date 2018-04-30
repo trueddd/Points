@@ -3,7 +3,6 @@ package feis_clan.points;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -17,13 +16,12 @@ public class GameActivity extends Activity {
     private boolean turn = false;
     private byte cells_status[][];
     private Stack<int[]> path = new Stack<>();
-    private int redScore = 0;
     private int redPointsCaptured = 0;
-    private int blueScore = 0;
     private int bluePointsCaptured = 0;
     private int sideSize, square;
     private byte visited[][];
     private int sI, sJ;
+    private boolean isFinished = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +66,11 @@ public class GameActivity extends Activity {
      * Generate short Toast when player tries to place his point on already occupied point.
      */
     private void filledPointToast(Context context){
-        Toast.makeText(context,"There is a point already!",Toast.LENGTH_SHORT).show();
+        if(isFinished){
+            Toast.makeText(context, "Game is over, you can leave now.", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(context, "There is a point already!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -137,7 +139,8 @@ public class GameActivity extends Activity {
      * Score directly depends on amount of points on the field.
      */
     private void recountScore(){
-        redScore = blueScore = 0;
+        int blueScore = 0;
+        int redScore = 0;
         for(int i=0;i<sideSize;i++){
             for(int j=0;j<sideSize;j++){
                 if(cells_status[i][j] == 1)
@@ -148,15 +151,12 @@ public class GameActivity extends Activity {
         }
         ((TextView)findViewById(R.id.redScoreText)).setText(String.format(Locale.getDefault(),"%d", redScore));
         ((TextView)findViewById(R.id.blueScoreText)).setText(String.format(Locale.getDefault(),"%d", blueScore));
-        if(redScore+blueScore == square){
-            showSnack();
+        if(redScore + blueScore == square){
+            isFinished = true;
+            PostGameDialog postgame = new PostGameDialog().newInstance(redScore, blueScore,
+                    redPointsCaptured, bluePointsCaptured);
+            postgame.show(getFragmentManager(), "postgame");
         }
-    }
-
-    private void showSnack(){
-        Snackbar snack = Snackbar.make(findViewById(R.id.field), "Boyz, you played so much, it\'s time to stop now!",
-                Snackbar.LENGTH_SHORT);
-        snack.show();
     }
 
     /**

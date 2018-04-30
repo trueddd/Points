@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 public class PreGameDialog extends DialogFragment {
     /**
      * seekbar - value
@@ -25,12 +27,12 @@ public class PreGameDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.pregame_dialog_view,null);
-        SeekBar slider = (SeekBar)dialogView.findViewById(R.id.field_size_slider);
-        final TextView currentSize = (TextView)dialogView.findViewById(R.id.pregame_dialog_current_size_text);
+        SeekBar slider = dialogView.findViewById(R.id.field_size_slider);
+        final TextView currentSize = dialogView.findViewById(R.id.pregame_dialog_current_size_text);
         slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                currentSize.setText(Integer.toString((progress+1)*5));
+                currentSize.setText(String.format(Locale.getDefault(), "%d", (progress+1)*5));
             }
 
             @Override
