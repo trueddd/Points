@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
     private LinearLayout startButton;
@@ -31,7 +30,8 @@ public class MainActivity extends Activity {
         statsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),R.string.stats_header,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, Statistics.class);
+                startActivity(intent);
             }
         });
 

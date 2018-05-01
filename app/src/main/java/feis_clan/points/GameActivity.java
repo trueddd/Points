@@ -22,6 +22,7 @@ public class GameActivity extends Activity {
     private byte visited[][];
     private int sI, sJ;
     private boolean isFinished = false;
+    private ScrollView turnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class GameActivity extends Activity {
 
         setContentView(R.layout.battlefield);
         grid = findViewById(R.id.grid);
+        turnBack = findViewById(R.id.turn_back);
 
         markupField();
         cells_status = getEmptyArray();
@@ -78,6 +80,7 @@ public class GameActivity extends Activity {
      */
     private void toggleTurn(){
         turn = !turn;
+        turnBack.setBackgroundColor(turn ? 0xffff0000 : 0xff0000ff);
     }
 
     /**

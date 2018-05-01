@@ -2,7 +2,9 @@ package feis_clan.points;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -35,6 +37,8 @@ public class PostGameDialog extends DialogFragment {
         int redCap = getArguments().getInt("redCaptured");
         int blueCap = getArguments().getInt("blueCaptured");
 
+        int result = 0;
+
         TextView redScore = view.findViewById(R.id.red_score);
         redScore.setText(String.format(Locale.getDefault(), "%d", red));
 
@@ -52,14 +56,19 @@ public class PostGameDialog extends DialogFragment {
         if((red - blue == 1 || blue - red == 1) && redCap == blueCap){
             redCup.setImageResource(R.drawable.hands_30);
             blueCup.setImageResource(R.drawable.hands_30);
+            result = 0;
         }else if(red > blue){
             redCup.setImageResource(R.drawable.cup_30);
+            result = 1;
         }else if(blue > red){
             blueCup.setImageResource(R.drawable.cup_30);
+            result = 2;
         }else {
             redCup.setImageResource(R.drawable.hands_30);
             blueCup.setImageResource(R.drawable.hands_30);
+            result = 0;
         }
+        updateStats(result, red, blue, redCap, blueCap);
 
         builder.setView(view)
                 .setPositiveButton(R.string.postgame_dialog_finish, new DialogInterface.OnClickListener() {
@@ -69,5 +78,33 @@ public class PostGameDialog extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    private void updateStats(int result, int redScore, int blueScore, int redCaptured, int blueCaptured){
+        SharedPreferences preferences = getActivity().getSharedPreferences(getString(R.string.preferences), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("GAMES_PLAYED", preferences.getInt("GAMES_PLAYED", 0) + 1);
+        if(result == 1){
+            editor.putInt("RED_WINS", preferences.getInt("RED_WINS", 0) + 1);
+        }else if(result == 2){
+            editor.putInt("BLUE_WINS", preferences.getInt("BLUE_WINS", 0) + 1);
+        }else {
+            editor.putInt("DRAWS", preferences.getInt("DRAWS", 0) + 1);
+        }
+        editor.putInt("RED_CAPTURED", preferences.getInt("RED_CAPTURED", 0) + redCaptured);
+        editor.putInt("BLUE_CAPTURED", preferences.getInt("BLUE_CAPTURED", 0) + blueCaptured);
+        if(preferences.getInt("MAX_SCORE", 0) < redScore){
+            editor.putInt("MAX_SCORE", redScore);
+        }
+        if(preferences.getInt("MAX_SCORE", 0) < blueScore){
+            editor.putInt("MAX_SCORE", blueScore);
+        }
+        if(preferences.getInt("MAX_CAPTURED", 0) < redCaptured){
+            editor.putInt("MAX_CAPTURED", redCaptured);
+        }
+        if(preferences.getInt("MAX_CAPTURED", 0) < blueCaptured){
+            editor.putInt("MAX_CAPTURED", blueCaptured);
+        }
+        editor.apply();
     }
 }

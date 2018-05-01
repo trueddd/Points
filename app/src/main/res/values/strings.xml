@@ -3,6 +3,7 @@
     <string name="new_game_header">New Game</string>
     <string name="stats_header">Statistics</string>
     <string name="exit_header">Exit</string>
+    <string name="preferences" translatable="false">POINTS_SHARED_PREFERENCES</string>
 
     <string name="pregame_dialog_title">Pregame Settings</string>
     <string name="pregame_dialog_message">Please, set up some settings before game starts.</string>
@@ -11,6 +12,7 @@
     <string name="low_bound_side_size" translatable="false">5</string>
     <string name="high_bound_side_size" translatable="false">15</string>
     <string name="zero" translatable="false">0</string>
+    <string name="pregame_dialog_notice">Notice: color of battlefield border will indicate current turn.</string>
     <string name="pregame_dialog_start">Start!</string>
 
     <string name="postgame_dialog_title">Game Over</string>
@@ -26,9 +28,18 @@
     <string name="postgame_dialog_finish">Exit battle</string>
     <string name="postgame_dialog_stay">Watch field</string>
 
+    <string name="total_games_played_title">Total games played</string>
+    <string name="red_wins_title">Red wins</string>
+    <string name="blue_wins_title">Blue wins</string>
+    <string name="draws_title">Draws</string>
+    <string name="red_captured_title">Red points captured</string>
+    <string name="blue_captured_title">Blue points captured</string>
+    <string name="max_score_title">Max score</string>
+    <string name="max_captured_per_game_title">Max captured per game by one player</string>
+
     <string name="exit_dialog_message">Are you sure to exit?</string>
     <string name="dialog_positive">Yes</string>
     <string name="dialog_negative">No</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="percent_sign">%</string>
+    <string name="percent_sign" translatable="false">%</string>
 </resources>

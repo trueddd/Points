@@ -13,4 +13,25 @@
     <string name="pregame_dialog_start">Старт!</string>
     <string name="pregame_dialog_title">Доигровая настройка</string>
     <string name="stats_header">Статистика</string>
+    <string name="blue_captured_title">Захваченные синие точки</string>
+    <string name="blue_wins_title">Победы синих</string>
+    <string name="draws_title">Ничьи</string>
+    <string name="max_captured_per_game_title">Макс. количество захваченных точек за один матч одним игроком</string>
+    <string name="max_score_title">Макс. количество очков за один матч</string>
+    <string name="postgame_dialog_blue">Синие</string>
+    <string name="postgame_dialog_blue_points_captured">Красными</string>
+    <string name="postgame_dialog_captures">Захваты</string>
+    <string name="postgame_dialog_field_coverage">Покрытие</string>
+    <string name="postgame_dialog_finish">Выйти из битвы</string>
+    <string name="postgame_dialog_free">Свободные</string>
+    <string name="postgame_dialog_red">Красные</string>
+    <string name="postgame_dialog_red_points_captured">Синими</string>
+    <string name="postgame_dialog_score">Счёт</string>
+    <string name="postgame_dialog_stay">Остаться</string>
+    <string name="postgame_dialog_title">Игра окончена</string>
+    <string name="postgame_dialog_winner">Победитель</string>
+    <string name="red_captured_title">Захваченные красные точки</string>
+    <string name="red_wins_title">Победы красных</string>
+    <string name="total_games_played_title">Сыгранно игр</string>
+    <string name="pregame_dialog_notice">Подсказка: текущий ход можно будет определить по цвету границы поля.</string>
 </resources>
